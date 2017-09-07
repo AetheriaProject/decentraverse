@@ -1,0 +1,87 @@
+<a-world-root>
+
+</a-world-root>
+
+<script>
+const worldroot = document.getElementsByTagName("a-world-root")[0];
+
+AFRAME.registerComponent('land', {
+    defaultComponents: {
+        geometry: {
+            primitive: "plane"
+        },
+        rotation: {
+            x: -90,
+            y: 0,
+            z: 0
+        }
+    },
+    schema: {
+        IPFSLoc: {
+            type: "string",
+            default: ""
+        }
+    },
+    init: function(){
+        const element   = this.el;
+        const data      = this.data;
+        const location  = data.IPFSLoc;
+        const resloc = resolve_to_ipfs(location);
+		const url = "https://ipfs.io/ipfs/" + resloc;
+		fetch(url).then(function(data){
+    		element.innerHTML = data.text();
+		}).catch(function(error){
+    		console.log("error : ", error);
+		});
+    }
+});
+
+var LoadedLands = []
+
+function createland(x, y, IPFSLoc)
+{
+	
+	land.setAttribute("position", x*10 + " 0 " + y*10);
+	land.setAttribute("IPFSLoc", IPFSLoc)
+	worldroot.append(land);
+	LoadedLands.push([x, y]); //to stop lands from stacking up only needs to be loaded once
+}
+
+function playerloc_to_land(pos_tuple)
+{
+	const x = pos_tuple[0];
+	const y = pos_tuple[1];
+	
+	const mx = Math.round(x/10);
+	const my = Math.round(y/10);
+	
+	return [mx, my];
+}
+
+function generate_tiles(center_tile)
+{
+	for(i = -2; i < 3; i++)
+	{
+		for(o = -2; o < 3; o++)
+		{
+			tile_x = center_tile[0] + i;
+			tile_y = center_tile[1] + o; 
+			if(containsObject([tile_x,tile_y], LoadedLands) == false)
+			{
+				createland(tile_x, tile_y, "");
+			}
+		}
+	}
+}
+function load_centraland()
+{
+window.setInterval(function(){
+  pos = avatar.getAttribute("position");
+  pos_tuple = [pos.x, pos.y];
+  tile = playerloc_to_land(pos_tuple)
+  
+  generate_tiles(tile);
+}, 500);
+}
+load_centraland();
+</script>

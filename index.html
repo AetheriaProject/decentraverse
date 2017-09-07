@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Welocme to decentraverse</title>
+		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+    	<script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
+    	<script src="https://unpkg.com/ipfs/dist/index.min.js"></script>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    	<script>
+    	var _GET = (function() {
+    		var _get = {};
+    		var re = /[?&]([^=&]+)(=?)([^&]*)/g;
+    		while (m = re.exec(location.search))
+        		_get[decodeURIComponent(m[1])] = (m[2] == '=' ? decodeURIComponent(m[3]) : true);
+   		    return _get;
+		})();
+    	</script>
+    	<script src="./DecentraverseEngine.js"></script>    	
+    	<script src="./Aframe-IPFS-Lookup.js"></script>
+    	<script>
+		$( document ).ready(function() {
+			setup_engine();
+		});
+		</script>
+	</head>
+	<body>
+		<a-scene id="decentraverse" class="fullscreen" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="" auto-enter-vr="">
+			<!-- <a-entity position="" camera="active:false;userHeight:1.6" rotation="" aframe-injected="" data-aframe-inspector="default-camera"> </a-entity> !-->
+			<a-avatar></a-avatar>
+		</a-scene>
+	</body>
+</html>
